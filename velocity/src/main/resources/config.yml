@@ -1,0 +1,11 @@
+# xCore (Velocity) configuration.
+# Reloaded by /xcore reload on the proxy.
+
+# Prefix prepended to xCore's own messages and any plugin that uses XMessages.sendPrefixed.
+prefix: "<gradient:#7CFFCB:#5FA8FF>[xSuite]</gradient> "
+
+# When true, xCore logs every cross-plugin event posted on the local event bus.
+debug-events: false
+
+# When true, xCore logs service registrations and lookups.
+debug-services: false

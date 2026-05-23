@@ -1,0 +1,19 @@
+name: xCore
+version: '${version}'
+main: dev.xsuite.core.paper.XCorePaperPlugin
+api-version: '1.21'
+folia-supported: true
+load: STARTUP
+author: xSuite
+description: Backbone plugin for the xSuite. Provides shared services, an event bus, config/messages, commands, a Folia-safe scheduler, and cross-server messaging via Velocity.
+website: https://github.com/xsuite
+commands:
+  xcore:
+    description: Manage xCore and inspect registered xSuite plugins.
+    usage: /xcore <reload|plugins|services|messenger|version>
+    permission: xcore.admin
+    aliases: [xc]
+permissions:
+  xcore.admin:
+    description: Full administrative access to xCore.
+    default: op

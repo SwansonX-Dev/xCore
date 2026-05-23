@@ -1,0 +1,12 @@
+# xCore (Velocity) message catalog. MiniMessage strings; <name> placeholders.
+
+no-permission: "<red>You don't have permission to do that."
+player-only: "<red>This command must be run by a player."
+unknown-subcommand: "<red>Unknown subcommand <yellow><sub><red>. Try <yellow>/xcore help<red>."
+reloaded: "<green>xCore reloaded in <yellow><ms>ms<green>."
+plugins-header: "<gray>Registered xSuite plugins (<yellow><count><gray>):"
+plugins-entry: "  <gray>- <aqua><name> <dark_gray>v<version>"
+services-header: "<gray>Registered services (<yellow><count><gray>):"
+services-entry: "  <gray>- <aqua><type> <dark_gray>(owner: <owner>)"
+messenger-status: "<gray>Messenger: self=<aqua><self> <gray>proxy=<aqua><proxy> <gray>peers=<aqua><peers>"
+version: "<gray>xCore <yellow><version><gray>, running on <yellow><platform><gray>."

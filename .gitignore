@@ -1,0 +1,21 @@
+.gradle/
+build/
+out/
+bin/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+
+# Local run server (run-paper)
+run/
+
+# OS
+.DS_Store
+Thumbs.db
