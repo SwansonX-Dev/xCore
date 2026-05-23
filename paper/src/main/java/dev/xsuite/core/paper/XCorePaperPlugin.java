@@ -11,6 +11,7 @@ import dev.xsuite.core.internal.service.ServiceRegistryImpl;
 import dev.xsuite.core.paper.internal.command.PaperXCommandManager;
 import dev.xsuite.core.paper.internal.commands.PaperXCoreCommand;
 import dev.xsuite.core.paper.internal.config.PaperXMessages;
+import dev.xsuite.core.paper.internal.gui.XMenuListener;
 import dev.xsuite.core.paper.internal.messenger.PaperPluginMessageTransport;
 import dev.xsuite.core.paper.internal.scheduler.XPaperSchedulerImpl;
 import net.kyori.adventure.text.Component;
@@ -88,6 +89,7 @@ public final class XCorePaperPlugin extends JavaPlugin implements XPluginHandle 
 
     @Override
     public void onEnable() {
+        getServer().getPluginManager().registerEvents(new XMenuListener(getSLF4JLogger()), this);
         commands.register(this, new PaperXCoreCommand(this));
         messenger.start();
         getSLF4JLogger().info("xCore (Paper) {} ready.", getPluginMeta().getVersion());
