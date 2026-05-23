@@ -101,19 +101,19 @@ public abstract class XPaperPlugin extends JavaPlugin implements XPluginHandle {
     /** Invoked when an operator runs {@code /xcore reload}. */
     public void onXReload() {}
 
-    // ---- subsystem accessors ----
+    // ---- subsystem accessors (public so other classes in the plugin can use plugin.messages() etc.) ----
 
-    protected final @NotNull XCoreAPI core() { return XCore.api(); }
-    protected final @NotNull ServiceRegistry services() { return core().services(); }
-    protected final @NotNull XEventBus events() { return core().events(); }
-    protected final @NotNull XCommandManager commands() { return core().commands(); }
-    protected final @NotNull XMessenger messenger() { return core().messenger(); }
+    public final @NotNull XCoreAPI core() { return XCore.api(); }
+    public final @NotNull ServiceRegistry services() { return core().services(); }
+    public final @NotNull XEventBus events() { return core().events(); }
+    public final @NotNull XCommandManager commands() { return core().commands(); }
+    public final @NotNull XMessenger messenger() { return core().messenger(); }
 
-    protected final @NotNull XPaperScheduler scheduler() {
+    public final @NotNull XPaperScheduler scheduler() {
         return (XPaperScheduler) core().scheduler();
     }
 
-    protected final @NotNull XMessages messages() {
+    public final @NotNull XMessages messages() {
         if (scopedMessages == null) scopedMessages = core().messages().forPlugin(this);
         return scopedMessages;
     }
