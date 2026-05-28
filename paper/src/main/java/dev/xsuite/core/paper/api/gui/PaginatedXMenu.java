@@ -54,6 +54,21 @@ public abstract class PaginatedXMenu extends XMenu {
                 .build();
     }
 
+    /** Slot index of the first cell in the bottom nav row. */
+    protected final int navRow() {
+        return (rows() - 1) * 9;
+    }
+
+    /**
+     * Called at the end of {@link #build()} so subclasses can place extra
+     * buttons (e.g. a back button) in the unused nav-row slots
+     * ({@code navRow() + 1..3, 5..7}). Slots 0, 4 and 8 are reserved for
+     * previous-page, page-indicator and next-page respectively.
+     */
+    protected void decoratePageNav() {
+        // no-op
+    }
+
     @Override
     protected final void build() {
         List<XMenuItem> all = contentItems();
@@ -66,7 +81,7 @@ public abstract class PaginatedXMenu extends XMenu {
             setItem(slot++, all.get(i));
         }
 
-        int lastRow = (rows() - 1) * 9;
+        int lastRow = navRow();
         for (int i = 0; i < 9; i++) setItem(lastRow + i, backgroundFiller());
 
         if (page > 0) {
@@ -82,5 +97,6 @@ public abstract class PaginatedXMenu extends XMenu {
                     .build());
         }
         setItem(lastRow + 4, pageIndicator(page, pageCount()));
+        decoratePageNav();
     }
 }
