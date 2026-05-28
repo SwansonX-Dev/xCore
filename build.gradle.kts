@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = "dev.xsuite"
-    version = "0.2.1-SNAPSHOT"
+    version = "0.2.2"
 }
 
 subprojects {
