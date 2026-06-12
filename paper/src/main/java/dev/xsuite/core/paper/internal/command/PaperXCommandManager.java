@@ -80,7 +80,12 @@ public final class PaperXCommandManager implements XCommandManager {
                     command.aliases());
             this.command = command;
             this.owner = owner;
-            if (!command.permission().isEmpty()) setPermission(command.permission());
+            // Intentionally NOT calling setPermission(): on Paper, a command whose
+            // permission the sender lacks is hidden from their command tree and
+            // resolves as "Unknown command", which hides admin commands from staff
+            // who simply haven't been granted the node. We enforce the permission
+            // in execute()/tabComplete() instead, so the command stays visible and
+            // a clear "no-permission" message is sent.
         }
 
         @Override
@@ -103,6 +108,9 @@ public final class PaperXCommandManager implements XCommandManager {
         public @NotNull List<String> tabComplete(@NotNull CommandSender sender,
                                                  @NotNull String alias,
                                                  @NotNull String[] args) {
+            if (!command.permission().isEmpty() && !sender.hasPermission(command.permission())) {
+                return Collections.emptyList();
+            }
             try {
                 XCommand current = command;
                 XCommandContext ctx = new XCommandContext(new PaperXSender(sender), alias, args, owner);
