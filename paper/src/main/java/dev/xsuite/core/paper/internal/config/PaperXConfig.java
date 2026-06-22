@@ -5,9 +5,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Bukkit YamlConfiguration-backed {@link XConfig}. Used for the default
@@ -34,6 +37,10 @@ public final class PaperXConfig implements XConfig {
     @Override public double getDouble(@NotNull String path, double def) { return yaml.getDouble(path, def); }
     @Override public boolean getBoolean(@NotNull String path, boolean def) { return yaml.getBoolean(path, def); }
     @Override public @NotNull List<String> getStringList(@NotNull String path) { return yaml.getStringList(path); }
+    @Override public @NotNull Set<String> getKeys(@NotNull String path) {
+        ConfigurationSection sec = yaml.getConfigurationSection(path);
+        return sec == null ? Set.of() : sec.getKeys(false);
+    }
     @Override public boolean contains(@NotNull String path) { return yaml.contains(path); }
     @Override public void set(@NotNull String path, @Nullable Object value) { yaml.set(path, value); }
 

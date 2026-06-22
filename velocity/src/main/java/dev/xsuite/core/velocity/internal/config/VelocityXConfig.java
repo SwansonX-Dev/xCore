@@ -15,8 +15,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * SnakeYAML-backed XConfig for Velocity. Uses dotted paths to navigate a
@@ -111,6 +113,14 @@ public final class VelocityXConfig implements XConfig {
         List<String> out = new ArrayList<>(raw.size());
         for (Object o : raw) out.add(String.valueOf(o));
         return out;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Set<String> getKeys(@NotNull String path) {
+        Object v = resolve(path);
+        if (!(v instanceof Map<?, ?> map)) return Set.of();
+        return new LinkedHashSet<>(((Map<String, Object>) map).keySet());
     }
 
     @Override public boolean contains(@NotNull String path) { return resolve(path) != null; }
