@@ -9,3 +9,48 @@ debug-events: false
 
 # When true, xCore logs service registrations and lookups.
 debug-services: false
+
+# The global /guide hub lists every player-facing plugin. xSuite plugins that
+# depend on xCore register themselves automatically. Plugins that DON'T compile
+# against xCore (the forks, third-party plugins) are listed here instead: each
+# entry adds a hub icon that runs the given command when clicked.
+#
+# An entry whose 'id' matches a plugin that registers itself in-process is
+# overridden by that plugin (so these act as fallbacks).
+guide:
+  external:
+    - id: novablock
+      name: "<gradient:#7B61FF:#4FC3F7><bold>NovaBlock</bold></gradient>"
+      icon: GRASS_BLOCK
+      command: "novahelp"
+      summary:
+        - "<gray>OneBlock islands, phases, bosses,"
+        - "<gray>skills, prophecies, prestige & co-op."
+    - id: novafishing
+      name: "<gradient:#FF6A00:#FFD200><bold>NovaFishing</bold></gradient>"
+      icon: FISHING_ROD
+      command: "novafishing guide"
+      summary:
+        - "<gray>Lava & void fishing with leveled rods,"
+        - "<gray>abilities, challenges & Nova Tokens."
+    - id: ogoneblock
+      name: "<gradient:#FFD700:#FF4DFF><bold>OG OneBlock</bold></gradient>"
+      icon: BEDROCK
+      command: "ogoneblock guide"
+      summary:
+        - "<gray>Hardcore vanilla-style OneBlock."
+        - "<gray>Prestige for permanent hearts & tags."
+    - id: tempfly
+      name: "<light_purple><bold>TempFly</bold></light_purple>"
+      icon: FEATHER
+      command: "tf guide"
+      summary:
+        - "<gray>Earn and spend temporary flight time,"
+        - "<gray>with speed control & particle trails."
+    - id: fasterhoppers
+      name: "<gold><bold>FasterHoppers</bold></gold>"
+      icon: HOPPER
+      command: "fh guide"
+      summary:
+        - "<gray>Turbo hoppers that move items fast,"
+        - "<gray>with item filters & custom recipes."

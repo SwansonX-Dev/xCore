@@ -8,10 +8,14 @@ import dev.xsuite.core.internal.codec.MessageCodec;
 import dev.xsuite.core.internal.event.XEventBusImpl;
 import dev.xsuite.core.internal.messenger.XMessengerImpl;
 import dev.xsuite.core.internal.service.ServiceRegistryImpl;
+import dev.xsuite.core.paper.api.guide.GuideEntry;
+import dev.xsuite.core.paper.api.guide.GuideRegistry;
 import dev.xsuite.core.paper.internal.command.PaperXCommandManager;
+import dev.xsuite.core.paper.internal.commands.GuideCommand;
 import dev.xsuite.core.paper.internal.commands.PaperXCoreCommand;
 import dev.xsuite.core.paper.internal.config.PaperXMessages;
 import dev.xsuite.core.paper.internal.gui.XMenuListener;
+import dev.xsuite.core.paper.internal.guide.GuideRegistryImpl;
 import dev.xsuite.core.paper.internal.messenger.PaperPluginMessageTransport;
 import dev.xsuite.core.paper.internal.scheduler.XPaperSchedulerImpl;
 import net.kyori.adventure.text.Component;
@@ -39,6 +43,7 @@ public final class XCorePaperPlugin extends JavaPlugin implements XPluginHandle 
     private PaperXCommandManager commands;
     private XMessengerImpl messenger;
     private PaperPluginMessageTransport transport;
+    private GuideRegistryImpl guides;
     private XCoreAPIImpl api;
 
     // ---- XPluginHandle ----
@@ -91,8 +96,46 @@ public final class XCorePaperPlugin extends JavaPlugin implements XPluginHandle 
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new XMenuListener(getSLF4JLogger()), this);
         commands.register(this, new PaperXCoreCommand(this));
+
+        // Global /guide hub. Seed externals from config (forks / non-xCore plugins);
+        // in-process plugins override these by registering a real GuideEntry on enable.
+        guides = new GuideRegistryImpl(getSLF4JLogger(), loadExternalGuides());
+        services.register(GuideRegistry.class, guides, this);
+        commands.register(this, new GuideCommand(guides));
+
         messenger.start();
         getSLF4JLogger().info("xCore (Paper) {} ready.", getPluginMeta().getVersion());
+    }
+
+    /** Parse the {@code guide.external} config list into command-dispatch guide entries. */
+    private java.util.List<GuideEntry> loadExternalGuides() {
+        java.util.List<GuideEntry> out = new java.util.ArrayList<>();
+        for (java.util.Map<?, ?> raw : getConfig().getMapList("guide.external")) {
+            try {
+                String id = String.valueOf(raw.get("id"));
+                String name = String.valueOf(raw.get("name"));
+                String command = String.valueOf(raw.get("command"));
+                if (id == null || name == null || command == null
+                        || id.equals("null") || name.equals("null") || command.equals("null")) {
+                    continue;
+                }
+                Object iconRaw = raw.get("icon");
+                org.bukkit.Material icon = iconRaw == null
+                        ? org.bukkit.Material.BOOK
+                        : org.bukkit.Material.matchMaterial(String.valueOf(iconRaw));
+                if (icon == null) icon = org.bukkit.Material.BOOK;
+
+                java.util.List<String> summary = new java.util.ArrayList<>();
+                Object loreObj = raw.get("summary");
+                if (loreObj instanceof java.util.List<?> list) {
+                    for (Object line : list) summary.add(String.valueOf(line));
+                }
+                out.add(GuideEntry.ofCommand(id, name, icon, summary, command));
+            } catch (Throwable t) {
+                getSLF4JLogger().warn("[xCore/guide] skipping malformed guide.external entry: {}", t.toString());
+            }
+        }
+        return out;
     }
 
     @Override
